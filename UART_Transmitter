@@ -1,9 +1,15 @@
 /* TRANSMIT THROUGH THE UART : STM32 UART */
+/* Author: Jawad Mehmood Butt*/
+/* Licence: Apache General*/
+/* This is a complete driver of transmitting the data from STM32 UART. Create the new STM32 project and put this code in main.c
+You can receive the transmitted data by using REALTERM application or other serial receiver.*/
+
+
 #include <stdint.h>
 #include "stm32f4xx.h"
 
 #define usart_clk_enable   (1U<<17)
-#define PA_enable          (1U<<0)
+#define port_A_clk_enable      (1U<<0)
 #define tx_enable          (1U<<3)
 #define uart_enable        (1U<<13)
 #define sr_txe             (1U<<7)
@@ -21,15 +27,15 @@ void uart_write_single(int x);
 // create the uart init function
 void uart_init(void)
 {
-	// Part A: UART GPIO Pin setup
+	// Part A: UART GPIO PortA setup
 	// enable clock to APB1 as its connected to USART2 USB port
-	RCC->APB1ENR |= PA_enable;
+	RCC->APB1ENR |= port_A_clk_enable;
 
 	// MODER OF GPIOA to Alternate FCN mode
 	GPIOA->MODER &= ~(1U<<4);
 	GPIOA->MODER |= (1U<<5);
 
-	// Alternate function setting: See alternate fcn map in data sheet, PA2 for USART TX is AFR7
+	// Alternate function setting: See alternate fcn map in data sheet of STM32F4, PA2 for USART TX is AFR7
 	GPIOA->AFR[0] &= ~(1U<<11);
 	GPIOA->AFR[0] |= (1U<<10);
 	GPIOA->AFR[0] |= (1U<<9);
@@ -45,23 +51,24 @@ void uart_init(void)
 }
 
 
-// set the baud rate for uart
+// calculate baud 
 static uint16_t calc_baud(uint32_t clksignal, uint32_t baudval)
 {
 	return ((clksignal + (baudval/2U))/baudval);
 
 }
-
+// set the baud rate for uart
 static void set_baud(USART_TypeDef *USARTx, uint32_t clksignal, uint32_t baudval)
 {
 	USARTx->BRR = calc_baud(clksignal, baudval);
 }
 
+// write function
 void uart_write_single(int x)
 {
-	// clear the data register by status register
+	// clear the data register by help of checking empty transfer bit of status register
 	while(!(USART2->SR & sr_txe)){}
-	// write data
+	// write data to data register
 	USART2->DR = (x & 0xFF);
 }
 
