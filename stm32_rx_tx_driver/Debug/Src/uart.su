@@ -1,0 +1,5 @@
+../Src/uart.c:21:6:uart_init	8	static
+../Src/uart.c:59:10:calc_baud	16	static
+../Src/uart.c:65:6:set_baud	24	static
+../Src/uart.c:70:6:uart_read	4	static
+../Src/uart.c:76:6:uart_write_single	16	static
