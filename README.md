@@ -15,3 +15,9 @@ Receiver Example: In main.c uncomment the receiver section
 4) I use the REAL TERM software for receiving the data installed on my windows desktop. Open this software, go to port section, set baud rate use in my code which is 115200 and set the port as your COM port. Then open the port, press any key from your PC keyboard. 
 5) You will see the data is coming to real window on STM32 CUBE IDE
 6) If press 1 it will turn on LED on your PC, else off
+
+# STM32F4_I2C: I2C Drivers and ADXL345
+The drivers for I2C in STM32F4.
+1) i2c.c and i2c.h contains i2c drivers. 
+2) adxl345.c and adxl345.h contains drivers of ADXL345 accelerometer and its using i2c.c
+3) main.c contains the test node to read the ADXL345 accelerations in 3D
