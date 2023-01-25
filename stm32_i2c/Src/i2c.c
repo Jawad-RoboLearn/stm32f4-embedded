@@ -16,6 +16,7 @@
 #define i2c_cr1_ack          (1U<<10)
 #define i2c_cr1_stop         (1U<<9)
 #define i2c_sr1_rxne         (1U<<6)
+#define i2c_sr1_btf          (1U<<2)
 
 
 void i2c_init(){
@@ -187,7 +188,52 @@ void i2c_burst_read(char slave_addr, char mem_addr, int nbyte, char* data)
     	     // read data from DR
     	     (*data++) = I2C1->DR;
 
-    	     n--;
+    	     nbyte--;
     	 }
      }
+}
+
+
+void i2c_burst_write(char slave_addr, char mem_addr, int nbyte, char* data)
+{
+	volatile int tmp;
+	// busy flag
+	// not busy
+
+		while(I2C1->SR2 & (i2c_sr_busy)){}
+
+		// generate start
+		I2C1->CR1 |= i2c_cr1_start;
+
+		// wait to start
+		while(!(I2C1->SR1 & (i2c_sr1_start_flag))){}
+
+	    // tx address + write
+		I2C1->DR = slave_addr << 1;
+
+		// wait for addr flag
+		while(!(I2C1->SR1 & (i2c_sr1_addr_flag))){}
+
+		// clear addr
+		tmp = I2C1->SR2;
+
+		// wait transmitter is empty
+		while (!(I2C1->SR1 & (i2c_sr1_txe))){}
+
+		// transmit mem addr
+		I2C1->DR = mem_addr;
+
+		for (int i = 0; i<=nbyte; i++)
+		{
+			// wait transmitter is empty
+			while (!(I2C1->SR1 & (i2c_sr1_txe))){}
+
+			//write
+			I2C1->DR = *data++;
+		}
+
+		while (!(I2C1->SR1 & (i2c_sr1_btf))){}
+
+	    // stop
+	    I2C1->CR1 |= i2c_cr1_stop;
 }

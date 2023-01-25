@@ -1,4 +1,4 @@
-Src/main.o: ../Src/main.c ../Inc/adxl345.h ../Inc/i2c.h \
+Src/adxl345.o: ../Src/adxl345.c ../Inc/adxl345.h ../Inc/i2c.h \
  D:/STM32CubeIDE_1.10.1/en.stm32cubef4_v1-27-0/STM32Cube_FW_F4_V1.27.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h \
  D:/STM32CubeIDE_1.10.1/en.stm32cubef4_v1-27-0/STM32Cube_FW_F4_V1.27.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f411xe.h \
  D:/STM32CubeIDE_1.10.1/en.stm32cubef4_v1-27-0/STM32Cube_FW_F4_V1.27.0/Drivers/CMSIS/Include/core_cm4.h \

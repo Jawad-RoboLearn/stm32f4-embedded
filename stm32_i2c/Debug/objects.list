@@ -1,5 +1,6 @@
+"./Src/adxl345.o"
+"./Src/i2c.o"
 "./Src/main.o"
 "./Src/syscalls.o"
 "./Src/sysmem.o"
-"./Src/uart.o"
 "./Startup/startup_stm32f411retx.o"
